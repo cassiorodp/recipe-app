@@ -13,7 +13,6 @@ import { detailsAPI } from '../services/apiRequest';
 
 // Helpers
 import capitalize from '../helpers/capitalizeStr';
-import renderRecs from '../helpers/renderRecs';
 import newRecipe from '../helpers/newRecipe';
 import checkFavorite from '../helpers/checkFavorite';
 
@@ -29,6 +28,7 @@ import {
   DetailsContent,
   DetailsThumb,
 } from '../styles/Styled2';
+import RenderRecs from '../components/RenderRecs';
 
 function Details({ foodDrink = '' }) {
   const history = useHistory(); // History
@@ -39,13 +39,12 @@ function Details({ foodDrink = '' }) {
   const foodDrinkCap = capitalize(foodDrink).slice(0, foodDrink.length - 1);
 
   const [details, setDetails] = useState(); // Detalhes
+  const [youtubeUrl, setYoutubeUrl] = useState() // Link para o iframe
   const [loading, setLoading] = useState(false); // Carregando
   const [isFavorite, setIsFavorite] = useState(false); // Favoritado
   const [showModal, setShowModal] = useState(false); // Mostrar mensagem
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
-
-  const [recs, setRecs] = useState(); // Recomendados
 
   /* Fetch dos detalhes e das receitas recomendadas */
   useEffect(() => {
@@ -54,7 +53,6 @@ function Details({ foodDrink = '' }) {
       const data = await detailsAPI(id, foodDrinkPT);
       setDetails(data[foodDrink][0]);
       setLoading(false);
-      setRecs(await renderRecs(foodDrinkPT));
     };
     fetchRecipe();
   }, [path, id, foodDrinkPT, foodDrink]);
@@ -68,6 +66,13 @@ function Details({ foodDrink = '' }) {
     }
     return null;
   };
+
+  useEffect(() => {
+    if (details && foodDrink === 'meals') {
+      const detailsUrl = details.strYoutube;
+      setYoutubeUrl(detailsUrl.replace('/watch?v=','/embed/'))
+    }
+  }, [details])
 
   /* setIsFavorite */
   useEffect(() => checkFavorite(id, setIsFavorite), [id, isFavorite]);
@@ -94,7 +99,6 @@ function Details({ foodDrink = '' }) {
       setIsFavorite(true);
     }
   };
-
   return (
     <section>
       {/* Carregando */}
@@ -161,14 +165,16 @@ function Details({ foodDrink = '' }) {
                 title={ `How to prepare ${details[`str${foodDrinkCap}`]}` }
                 className="details-video"
                 data-testid="video"
-                src={ (details.strYoutube.replace('watch?v=', 'embed/')) }
+                src={ youtubeUrl }
                 allowFullScreen
               />
             )}
 
             {/* Carrossel de receitas recomendadas */}
             <h2>Recommended</h2>
-            <Carousel>{ recs }</Carousel>
+            <Carousel>
+              <RenderRecs foodDrinkPT={foodDrinkPT} />
+            </Carousel>
 
             {/* Iniciar receita */}
             <button
