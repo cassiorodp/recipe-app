@@ -24,13 +24,13 @@ import {
 import { ingredientsAPI, areasAPI, recipesByAreaAPI } from '../services/apiRequest';
 
 // Styles
-// import {
-//   Container,
-// } from '../styles/Styled';
+import {
+  Container,
+} from '../styles/Styled';
 
 import {
-  // List,
   Card,
+  Dropdown,
 } from '../styles/Styled2';
 
 function Explore(props) {
@@ -107,64 +107,65 @@ function Explore(props) {
 
       {/* Cards de ingredientes */}
       { shouldRenderIngrs(browseByIngr, ingredients, loading) && (
-        ingredients.map(({ name, thumb, type }, i) => (
-          <Link
-            key={ i }
-            to={ {
-              pathname: `/${type}`,
-              state: name,
-            } }
-          >
-            <Card
-              style={ {
-                backgroundImage: `url(${thumb})`,
-                backgroundSize: 'contain',
-                margin: '1em auto',
+        <Container>
+          { ingredients.map(({ name, thumb, type }, i) => (
+            <Link
+              key={ i }
+              to={ {
+                pathname: `/${type}`,
+                state: name,
               } }
             >
-              <span data-testid={ `${i}-card-name` }>{ name }</span>
-            </Card>
-          </Link>
-        ))
+              <Card
+                style={ {
+                  backgroundImage: `url(${thumb})`,
+                  backgroundSize: 'contain',
+                } }
+              >
+                <span data-testid={ `${i}-card-name` }>{ name }</span>
+              </Card>
+            </Link>
+          )) }
+        </Container>
       ) }
 
       {/* Dropdown areas */}
       { shouldRenderAreas(browseByArea, loading) && (
         <>
-          <select
-            data-testid="explore-by-area-dropdown"
-            onChange={ (evt) => handleChange(evt) }
-          >
-            {/* Mostra todas as receitas */}
-            <option data-testid="All-option" value="All">All</option>
+          <Container>
+            <Dropdown onChange={ (evt) => handleChange(evt) }>
+              {/* Opção todos os países */}
+              <option data-testid="All-option" value="All">All</option>
 
-            {/* Receitas por país */}
-            { areas.map((area, i) => (
-              <option
+              { areas.map((area, i) => (
+                <option
+                  key={ i }
+                  data-testid={ `${area}-option` }
+                  value={ area }
+                >
+                  { area }
+                </option>
+              )) }
+            </Dropdown>
+          </Container>
+
+          <Container>
+            { recipes.map(({ idMeal, strMeal, strMealThumb }, i) => (
+              <Link
                 key={ i }
-                data-testid={ `${area}-option` }
-                value={ area }
+                to={ `/comidas/${idMeal}` }
               >
-                { area }
-              </option>
-            )) }
-          </select>
-
-          { recipes.map(({ idMeal, strMeal, strMealThumb }, i) => (
-            <div key={ i } data-testid={ `${i}-recipe-card` }>
-              <Link to={ `/comidas/${idMeal}` }>
-                <img
-                  src={ strMealThumb }
-                  alt={ strMeal }
-                  data-testid={ `${i}-card-img` }
-                  style={ { width: '300px' } }
-                />
-                <span data-testid={ `${i}-card-name` }>
-                  { strMeal }
-                </span>
+                <Card
+                  style={ {
+                    backgroundImage: `url(${strMealThumb})`,
+                    backgroundSize: 'contain',
+                  } }
+                >
+                  <span>{ strMeal }</span>
+                </Card>
               </Link>
-            </div>
-          )) }
+            )) }
+          </Container>
         </>
       ) }
 

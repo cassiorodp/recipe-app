@@ -1,59 +1,55 @@
 // React
 import React, { useState } from 'react';
+
+// Router
 import { Link } from 'react-router-dom';
 
-// Bootstrap
-import { Button, ButtonGroup, ButtonToolbar, Modal } from 'react-bootstrap';
-
 // Children
-import copy from 'clipboard-copy';
 import Header from '../components/Header';
-
-// Services
+import ShareButton from '../components/ShareButton';
 
 // Helpers
 import { loadLocalStorage } from '../helpers/localStorageHelper';
-
-// Images
-import shareIcon from '../images/shareIcon.svg';
 import notEmpty from '../helpers/notEmpty';
 
-function Done() {
-  const [showModal, setShowModal] = useState(false); // Mostrar mensagem
-  const handleShowModal = () => setShowModal(true);
-  const handleCloseModal = () => setShowModal(false);
-  const [filterBtns, setFilterBtns] = useState('all');
+// Styles
+import {
+  Button,
+  Container,
+} from '../styles/Styled';
 
+import CardExt from '../styles/Styled3';
+
+function Done() {
+  // Variables
   const doneRecipes = loadLocalStorage('doneRecipes');
 
-  function filterByType() { // talvez vire uam funcao helper, pois está sendo usada em Favorites
-    const filtering = doneRecipes.filter((recipe) => recipe.type === filterBtns);
-    return filtering;
-  }
+  // State Hooks
+  const [filterBtns, setFilterBtns] = useState('all');
 
-  function renderTags(tags, recipeIndex) {
-    return (
-      <ButtonToolbar aria-label="Toolbar with button groups">
-        {
-          tags.map((tag) => (
-            <ButtonGroup
-              key={ `${recipeIndex}-${tag}-BtnGroup` }
-              className="me-2"
-              aria-label="First group"
-            >
-              <Button
-                data-testid={ `${recipeIndex}-${tag}-horizontal-tag` }
-              >
-                { tag }
-              </Button>
-            </ButtonGroup>))
-        }
-      </ButtonToolbar>
-    );
-  }
+  // Filtrar por tipo
+  const filterByType = () => {
+    const filtered = doneRecipes.filter((recipe) => recipe.type === filterBtns);
+    return filtered;
+  };
 
+  // Renderizar categorias do card
+  const renderTags = (tags) => tags.map((tag, i, arr) => {
+    if (i !== (arr.length - 1)) {
+      return (
+        <span className="recipe-tag" key={ i }>
+          { tag }
+          ,
+          {' '}
+        </span>);
+    }
+    return (<span className="recipe-tag" key={ i }>{ tag }</span>);
+  });
+
+  // Renderizar cards
   function renderDoneRecipes() {
     const filterCheck = filterBtns === 'all' ? doneRecipes : filterByType();
+
     return (filterCheck).map(({
       id,
       image,
@@ -64,80 +60,61 @@ function Done() {
       alcoholicOrNot,
       doneDate,
       tags,
-    }, index) => (
-      <div key={ index } data-testid={ type }>
-        <Link to={ `${type}s/${id}` }>
-          <img
-            style={ { width: '100%' } }
-            src={ image }
-            alt=""
-            data-testid={ `${index}-horizontal-image` }
-          />
-        </Link>
-        <h4
-          data-testid={ `${index}-horizontal-top-text` }
-        >
-          { type === 'comida' ? `${area} - ${category}` : `${alcoholicOrNot}` }
-        </h4>
-        <p>{type === 'comida' ? `${area} - ${category}` : `${alcoholicOrNot}`}</p>
-        <Link to={ `${type}s/${id}` }>
-          <h2 data-testid={ `${index}-horizontal-name` }>{name}</h2>
-        </Link>
-        <button
-          type="button"
-          className="details-share-btn"
-          onClick={ () => {
-            copy(`http://localhost:3000/${type}s/${id}`); // Copia o link de acordo com o tipo e id
-            handleShowModal();
-          } }
-        >
-          <img
-            src={ shareIcon }
-            alt="Copiar Link"
-            data-testid={ `${index}-horizontal-share-btn` }
-          />
-        </button>
+    }, i) => (
+      <CardExt key={ i } secondary>
+        {/* Thumb */}
+        <div className="card-ext-content">
+          <Link className="card-ext-thumb" to={ `${type}s/${id}` }>
+            <img src={ image } alt={ image } />
+          </Link>
 
-        <Modal show={ showModal } onHide={ handleCloseModal }>
-          <Modal.Header closeButton>
-            Link copiado!
-          </Modal.Header>
-        </Modal>
-        <p data-testid={ `${index}-horizontal-done-date` }>{ doneDate }</p>
-        { renderTags(tags, index) }
-        {/* RENDER TAGS USA O INDEX DE FILTERCHECK PARA PASSAR NO TESTE */}
-      </div>
+          <div className="card-ext-info">
+            {/* Nome */}
+            <h4>{name}</h4>
+
+            {/* Alcólico, Categoria, Origem */}
+            <span>
+              {type === 'comida' ? `${area} - ${category}` : `${alcoholicOrNot}`}
+            </span>
+          </div>
+
+          {/* Data de conclusão */}
+          <div className="card-ext-date">
+            <p>{ doneDate }</p>
+          </div>
+        </div>
+
+        <div className="card-ext-taglist">
+          <i className="uil uil-tag-alt icon" />
+
+          {/* Tags */}
+          { renderTags(tags) }
+
+          {/* Compartilhar */}
+          <ShareButton foodDrink={ type } id={ id } />
+        </div>
+      </CardExt>
     ));
   }
 
   return (
-    <section>
+    <Container>
       <Header title="Receitas Feitas" />
-      <section>
-        <Button
-          variant="dark"
-          data-testid="filter-by-all-btn"
-          onClick={ () => setFilterBtns('all') }
-        >
-          All
-        </Button>
-        <Button
-          variant="danger"
-          data-testid="filter-by-food-btn"
-          onClick={ () => setFilterBtns('comida') }
-        >
-          Food
-        </Button>
-        <Button
-          variant="success"
-          data-testid="filter-by-drink-btn"
-          onClick={ () => setFilterBtns('bebida') }
-        >
-          Drinks
-        </Button>
-      </section>
-      { notEmpty(doneRecipes) ? renderDoneRecipes() : <p>Adicione novas Receitas!</p> }
-    </section>
+      <Container style={ { margin: '1em auto' } }>
+        {/* Comidas e bebidas feitas */}
+        <Button onClick={ () => setFilterBtns('all') } small>All</Button>
+
+        {/* Comidas feitas */}
+        <Button onClick={ () => setFilterBtns('comida') } small>Food</Button>
+
+        {/* Bebidas feitas */}
+        <Button onClick={ () => setFilterBtns('bebida') } small>Drinks</Button>
+      </Container>
+
+      {/* Cards */}
+      { notEmpty(doneRecipes) ? renderDoneRecipes() : <p>Adicione novas Receitas!</p>}
+
+    </Container>
   );
 }
 

@@ -1,88 +1,44 @@
 // React
 import React from 'react';
-import { screen } from '@testing-library/react';
+// import { screen } from '@testing-library/react';
+// import userEvent from '@testing-library/user-event';
 
 // Children
-import userEvent from '@testing-library/user-event';
-import App from '../App';
+import Details from '../pages/Details';
 
 // Helpers
 import renderWithReduxAndRouter from '../helpers/renderWithReduxAndRouter';
 
-// Variables;
-const RECIPE_PHOTO = 'recipe-photo';
-const RECIPE_TITLE = 'recipe-title';
-const SHARE_BTN = 'share-btn';
-const FAVORITE_BTN = 'favorite-btn';
-const RECIPE_CATEGORY = 'recipe-category';
-const INSTRUCTIONS = 'instructions';
-const START_RECIPE_BTN = 'start-recipe-btn';
-const VIDEO_FRAME = 'video';
+// Variables
+// const RECIPE_PHOTO = 'recipe-photo';
+// const RECIPE_TITLE = 'recipe-title';
+// const SHARE_BTN = 'share-btn';
+// const FAVORITE_BTN = 'favorite-btn';
+// const RECIPE_CATEGORY = 'recipe-category';
+// const INGR_ITEM = '0-ingredient-name-and-measure';
+// const INSTRUCTIONS = 'instructions';
+// const VIDEO = 'video';
+// const REC_ITEM = '0-recomendation-card';
+// const START_RECIPE_BTN = 'start-recipe-btn';
 
-// Mock copy library
-jest.mock('clipboard-copy');
-
-// History mock
-let historyMock;
-
-describe('Testa a página de detalhes', () => {
+describe('Testa a página de login', () => {
   beforeEach(() => {
-    const { history } = renderWithReduxAndRouter(<App />,
-      { initialState: {}, initialEntries: ['/comidas/52977'] });
-    historyMock = history;
+    renderWithReduxAndRouter(<Details />);
   });
 
-  it('Contem os elementos da tela', async () => {
-    const img = await screen.findByTestId(RECIPE_PHOTO);
-    const tittle = await screen.findByTestId(RECIPE_TITLE);
-    const shareBtn = await screen.findByTestId(SHARE_BTN);
-    const favoriteBtn = await screen.findByTestId(FAVORITE_BTN);
-    const recipeCategory = await screen.findByTestId(RECIPE_CATEGORY);
-    const instructions = await screen.findByTestId(INSTRUCTIONS);
-    const startBtn = await screen.findByTestId(START_RECIPE_BTN);
-    const video = await screen.findByTestId(VIDEO_FRAME);
+  // it('33 - Implemente os elementos da tela de detalhes de uma receita...', async () => {
+  //   const recipePhoto = await screen.findByTestId(RECIPE_PHOTO);
+  //   const recipeTitle = await screen.findByTestId(RECIPE_TITLE);
+  //   const shareBtn = await screen.findByTestId(SHARE_BTN);
+  //   const favoriteBtn = await screen.findByTestId(FAVORITE_BTN);
+  //   const recipeCategory = await screen.findByTestId(RECIPE_CATEGORY);
+  //   const instructions = await screen.findByTestId(INSTRUCTIONS);
+  //   const video = await screen.findByTestId(VIDEO);
+  //   const startRecipeBtn = await screen.findByTestId(START_RECIPE_BTN);
 
-    expect(img).toBeInTheDocument();
-    expect(tittle).toBeInTheDocument();
-    expect(shareBtn).toBeInTheDocument();
-    expect(favoriteBtn).toBeInTheDocument();
-    expect(recipeCategory).toBeInTheDocument();
-    expect(instructions).toBeInTheDocument();
-    expect(video).toBeInTheDocument();
-    expect(startBtn).toBeInTheDocument();
-  });
+  //   const all = [recipePhoto, recipeTitle, shareBtn, favoriteBtn, recipeCategory,
+  //     instructions, video, startRecipeBtn];
 
-  it('testa botão de favorito', async () => {
-    const favoriteBtn = await screen.findByTestId(FAVORITE_BTN);
-    const fullHeart = 'http://localhost/blackHeartIcon.svg';
-    const emptyHeart = 'http://localhost/whiteHeartIcon.svg';
-    userEvent.click(favoriteBtn);
-
-    expect(favoriteBtn).toBeInTheDocument();
-    expect(fullHeart).toEqual(favoriteBtn.src);
-
-    userEvent.click(favoriteBtn);
-    expect(emptyHeart).toEqual(favoriteBtn.src);
-  });
-
-  it('renderização condicional do botão iniciar receita', async () => {
-    const recipes = {
-      cocktails: {},
-      meals: { 52977: ['Cumin - 2 tsp', 'Tomato Puree - 1 tbs'] },
-    };
-
-    localStorage.setItem('inProgressRecipes', JSON.stringify(recipes));
-
-    const startBtn = await screen.findByTestId(START_RECIPE_BTN);
-
-    expect(startBtn.innerHTML).toBe('Continuar Receita');
-  });
-
-  it('testa redirecionamento do botão iniciar receita', async () => {
-    const startBtn = await screen.findByTestId(START_RECIPE_BTN);
-
-    userEvent.click(startBtn);
-
-    expect(historyMock.location.pathname).toBe('/comidas/52977/in-progress');
-  });
+  //   all.forEach((el) => expect(el).toBeInTheDocument());
+  // });
 });

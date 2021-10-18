@@ -145,7 +145,7 @@ function Recipes({ foodDrink }) {
         }
 
         {/* Cards de receitas */}
-        <Container>
+        <Container recipes>
           {
             recipes && recipes.length > 1 && (
               (renderRecipes()).map((recipe, index) => {

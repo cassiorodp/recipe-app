@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 
 /* ================== COLOR VARIABLES ================== */
-// const black = '#1e2328'; // Dark Shades
-// const blackAlt = '#2a2e34';
 const blackLighter = '#3b3f46';
 
 const gray = '#D6D6D6'; // Light Shades
@@ -23,7 +21,6 @@ const colorRandomizer = () => {
 };
 
 /* ==================== COMPONENTS ==================== */
-
 /* ============= HORIZONTAL LIST ============= */
 export const List = styled.div`
   align-items: center;
@@ -106,7 +103,7 @@ export const DetailsBtns = styled.div`
   }
 `;
 
-// Details
+// Content
 export const DetailsContent = styled.div`
   align-items: flex-start;
   background-color: ${white};
@@ -126,7 +123,6 @@ export const DetailsContent = styled.div`
   & > .details-video,
   & > .details-category {
     margin: 0 auto;
-    text-align: center;
     padding: 0 1.6em;
   }
 
@@ -212,4 +208,14 @@ export const CheckboxList = styled.ol`
   & > li > label > span {
     margin: .25em;
   }
+`;
+
+/* ============= EXPLORE ============= */
+export const Dropdown = styled.select`
+  border: 1px solid ${gray};
+  border-radius: .3em;
+  font: 400 1.15rem Poppins , sans-serif;
+  margin: 1em auto;
+  outline: 0;
+  padding: 3px 10px;
 `;
