@@ -1,8 +1,9 @@
 import React from 'react';
-import { screen } from '@testing-library/react';
+import { act, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import renderWithReduxAndRouter from '../helpers/renderWithReduxAndRouter';
 import App from '../App';
+import { Profile } from '../pages';
 
 const PROFILE_EMAIL = 'profile-email';
 const DONE_BTN = 'profile-done-btn';
@@ -45,6 +46,7 @@ describe('1. Testar o componente profile', () => {
       clear: jest.fn(),
     };
     global.localStorage = localStorageMock;
+
     const logoutBtn = screen.getByTestId(LOGOUT_BTN);
     userEvent.click(logoutBtn);
 
@@ -62,5 +64,25 @@ describe('1. Testar o componente profile', () => {
     userEvent.click(doneBtn);
 
     expect(mockHistory.location.pathname).toBe('/receitas-feitas');
+  });
+});
+describe('Testa funcionalidades do Profile', () => {
+  beforeEach(() => {
+    const { history } = renderWithReduxAndRouter(<Profile />);
+    mockHistory = history;
+  });
+  it('1-3 Testa se, ao clicar em Receitas feitas, redireciona à lista.', () => {
+    const doneBtn = screen.getByTestId(DONE_BTN);
+
+    act(() => { userEvent.click(doneBtn); });
+
+    expect(mockHistory.location.pathname).toBe('/receitas-feitas');
+  });
+  it('1-4 Testa se, ao clicar em Receitas Favoritas, redireciona à lista', () => {
+    const favoriteButton = screen.getByRole('button', { name: /receitas favoritas/i });
+
+    act(() => { userEvent.click(favoriteButton); });
+
+    expect(mockHistory.location.pathname).toBe('/receitas-favoritas');
   });
 });
