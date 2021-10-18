@@ -15,6 +15,7 @@
  - React route
  - React hooks
  - Redux
+ - React-Redux hooks
 
 ---
 
