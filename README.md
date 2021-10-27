@@ -2,7 +2,7 @@
 
 ---
 <p align='center'>
-  <img src=https://github.com/cassiorodp/recipe-app/blob/master/src/images/landing-image.png?raw=true alt='landing-page' />
+  <img src=/landing_page.png alt='landing-page' />
 </p>
 
 ---
