@@ -1,9 +1,9 @@
 ## Recipe app
 
 ---
-<p align='center'>
+<div align='center'>
   <img src=/landing_page.png alt='landing-page' />
-</p>
+</div>
 
 ---
 
