@@ -1,4 +1,4 @@
-## Recipe app
+## Let's Cook App
 
 ---
 <div align='center'>
