@@ -1,9 +1,6 @@
-<p align="center">
-  <a href="https://github.com/cassiorodp/pokemon-world" target="_blank">
-    <img src="./src/images/logo.png" alt="Logo" width="120" height="120">
-  </a>
-
   <h2 align="center">Let's Cook App</h2>
+
+  <br/>
 
   <p align="center">
     Online recipe app to search for your favorite recipes! powered by <a href="https://www.themealdb.com/" target="_blank">TheMealdb</a> & <a href="https://www.thecocktaildb.com/" target="_blank">TheCockTaildb</a>.
